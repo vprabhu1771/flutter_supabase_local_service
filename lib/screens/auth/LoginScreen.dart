@@ -4,6 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../admin/AdminDashboard.dart';
 import '../../freelancer/FreelancerDashboard.dart';
+import '../HomePage.dart';
 import '../HomeScreen.dart';
 import 'RegisterScreen.dart';
 
@@ -70,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (role == 'admin') {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => AdminDashboard(title: "Admin Dashboard",)));
     } else if (role == 'customer') {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomeScreen(title: 'Home')));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomePage()));
     } else if (role == 'delivery') {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => FreelancerDashboard(title: "Freelancer Dashboard",)));
     }
