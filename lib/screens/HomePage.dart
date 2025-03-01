@@ -7,7 +7,7 @@ import '../services/LocationService.dart';
 import '../widgets/CustomDrawer.dart';
 import '../widgets/CustomLocationAppBar.dart';
 import 'BookingScreen.dart';
-import 'ProfileScreen.dart';
+import '../screens/auth/ProfileScreen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
