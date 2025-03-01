@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_supabase_local_service/models/UserSubCategory.dart';
+import 'package:flutter_supabase_local_service/screens/BookingScreen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/SubCategory.dart';
+import 'BookServiceScreen.dart';
 
 class FreelancerScreen extends StatefulWidget {
   final SubCategory subCategory;
@@ -65,6 +67,18 @@ class _FreelancerScreenState extends State<FreelancerScreen> {
               backgroundImage: NetworkImage('https://gravatar.com/avatar/${user!.email}'), // Replace with the user's image URL
             ),
             title: Text(user.name),
+
+            onTap: () {
+
+              Navigator.pop(context);
+
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => BookServiceScreen(freelanceId: user.id,),
+                ),
+              );
+
+            },
           );
         },
       ),
