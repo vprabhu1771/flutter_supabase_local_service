@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter_supabase_local_service/screens/ServiceScreen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/Category.dart';
 import '../models/SubCategory.dart';
@@ -22,9 +23,9 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
   int _current = 0;
 
   final List<String> imgList = [
-    'https://via.placeholder.com/800x400?text=Banner+1',
-    'https://via.placeholder.com/800x400?text=Banner+2',
-    'https://via.placeholder.com/800x400?text=Banner+3',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiVSWbVub0mqWA1pqOwvHitnAFtdXHVt-NKA&s',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiVSWbVub0mqWA1pqOwvHitnAFtdXHVt-NKA&s',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiVSWbVub0mqWA1pqOwvHitnAFtdXHVt-NKA&s',
   ];
 
   List<Widget> get imageSliders => imgList
@@ -143,6 +144,15 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
                       return GestureDetector(
                         onTap: () {
                           // Handle subcategory tap if needed
+
+                          // Navigator.pop(context);
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ServiceScreen(subCategory: subcategory,),
+                            ),
+                          );
                         },
                         child: Card(
                           elevation: 4,
