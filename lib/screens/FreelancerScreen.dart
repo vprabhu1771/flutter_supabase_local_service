@@ -3,16 +3,16 @@ import 'package:flutter_supabase_local_service/models/UserSubCategory.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/SubCategory.dart';
 
-class ServiceScreen extends StatefulWidget {
+class FreelancerScreen extends StatefulWidget {
   final SubCategory subCategory;
 
-  const ServiceScreen({super.key, required this.subCategory});
+  const FreelancerScreen({super.key, required this.subCategory});
 
   @override
-  State<ServiceScreen> createState() => _ServiceScreenState();
+  State<FreelancerScreen> createState() => _FreelancerScreenState();
 }
 
-class _ServiceScreenState extends State<ServiceScreen> {
+class _FreelancerScreenState extends State<FreelancerScreen> {
   final supabase = Supabase.instance.client;
 
   List<UserSubCategory> users = [];
