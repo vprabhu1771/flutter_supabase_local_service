@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter_supabase_local_service/screens/ServiceScreen.dart';
+import 'package:flutter_supabase_local_service/screens/FreelancerScreen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/Category.dart';
 import '../models/SubCategory.dart';
@@ -150,7 +150,7 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ServiceScreen(subCategory: subcategory,),
+                              builder: (context) => FreelancerScreen(subCategory: subcategory,),
                             ),
                           );
                         },
