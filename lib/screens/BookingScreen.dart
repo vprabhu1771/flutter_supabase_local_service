@@ -23,7 +23,7 @@ class _BookingScreenState extends State<BookingScreen> {
           booking_date,
           status,
           customer:users(*),
-          freelancer:user_subcategory(*, users(*)),
+          freelancer:freelancer(*, users(*)),
           sub_category:sub_categories(*)
         ''')
         .order('booking_date', ascending: false);
