@@ -29,9 +29,14 @@ class BookServiceScreen extends ConsumerWidget {
     final subCategoryId = 1; // Replace with the actual subcategory ID
 
     try {
+
+      final providerResponse = await supabase.from('user_subcategory').select().eq('user_id', freelanceId).single();
+
+      print(providerResponse);
+
       final response = await supabase.from('service_bookings').insert({
         'customer_id': customerId,
-        'provider_id': providerId,
+        'provider_id': providerResponse['id'],
         'sub_category_id': subCategoryId,
         'booking_date': "${DateFormat('yyyy-MM-dd').format(selectedDate)} $selectedTimeSlot",
         'status': 'pending',
@@ -53,6 +58,7 @@ class BookServiceScreen extends ConsumerWidget {
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+      print('Error: $e');
     }
   }
 
