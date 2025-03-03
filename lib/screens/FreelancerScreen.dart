@@ -29,7 +29,7 @@ class _FreelancerScreenState extends State<FreelancerScreen> {
   Future<void> fetchUsers() async {
     try {
       final response = await supabase
-          .from('user_subcategory')
+          .from('freelancer')
           .select('user_id, users(*)')
           .eq('sub_category_id', widget.subCategory.id);
 
