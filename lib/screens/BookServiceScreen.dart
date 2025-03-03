@@ -30,13 +30,14 @@ class BookServiceScreen extends ConsumerWidget {
 
     try {
 
-      final providerResponse = await supabase.from('user_subcategory').select().eq('user_id', freelanceId).single();
+      final providerResponse = await supabase.from('freelancer').select().eq('user_id', freelanceId).single();
 
       print(providerResponse);
 
       final response = await supabase.from('service_bookings').insert({
         'customer_id': customerId,
-        'provider_id': providerResponse['id'],
+        'freelancer_id': providerResponse['id'],
+        'freelancer_user_id': providerResponse['user_id'],
         'sub_category_id': subCategoryId,
         'booking_date': "${DateFormat('yyyy-MM-dd').format(selectedDate)} $selectedTimeSlot",
         'status': 'pending',
