@@ -1,6 +1,6 @@
 ```sql
 -- 6. user_category_subcategory (pivot table)
-CREATE TABLE user_subcategory (
+CREATE TABLE freelancer (
     user_id UUID NOT NULL,
     sub_category_id BIGINT NOT NULL,
     PRIMARY KEY (user_id, sub_category_id),
@@ -11,7 +11,7 @@ CREATE TABLE user_subcategory (
 # OR
 
 ```sql
-CREATE TABLE user_subcategory (
+CREATE TABLE freelancer (
     id BIGSERIAL PRIMARY KEY,
     user_id UUID NOT NULL,
     sub_category_id BIGINT NOT NULL,
