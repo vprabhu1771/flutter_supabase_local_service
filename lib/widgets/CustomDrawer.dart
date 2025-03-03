@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_supabase_local_service/freelancer/YourBookingScreen.dart';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -91,13 +92,13 @@ class CustomDrawer extends StatelessWidget {
                   leading: Icon(Icons.calendar_month),
                   title: Text('Your Booking'),
                   onTap: () {
-                    // Navigator.pop(context);
-                    // Navigator.push(
-                    //   parentContext,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => GoldSchemeScreen(title: 'Gold Scheme'),
-                    //   ),
-                    // );
+                    Navigator.pop(context);
+                    Navigator.push(
+                      parentContext,
+                      MaterialPageRoute(
+                        builder: (context) => YourBookingScreen(title: 'Your Bookings'),
+                      ),
+                    );
                   },
                 ),
 
