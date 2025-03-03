@@ -22,9 +22,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
   String searchQuery = '';
 
   final List<String> imgList = [
-    'https://via.placeholder.com/800x400?text=Banner+1',
-    'https://via.placeholder.com/800x400?text=Banner+2',
-    'https://via.placeholder.com/800x400?text=Banner+3',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiVSWbVub0mqWA1pqOwvHitnAFtdXHVt-NKA&s',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiVSWbVub0mqWA1pqOwvHitnAFtdXHVt-NKA&s',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiVSWbVub0mqWA1pqOwvHitnAFtdXHVt-NKA&s',
   ];
 
   List<Widget> get imageSliders => imgList
