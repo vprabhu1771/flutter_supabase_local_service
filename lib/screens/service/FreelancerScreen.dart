@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_supabase_local_service/models/UserSubCategory.dart';
 import 'package:flutter_supabase_local_service/screens/BookingScreen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../models/SubCategory.dart';
-import 'BookServiceScreen.dart';
+import '../../models/SubCategory.dart';
+import '../BookServiceScreen.dart';
 
 class FreelancerScreen extends StatefulWidget {
   final SubCategory subCategory;
