@@ -6,7 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import '../services/LocationService.dart';
 import '../widgets/CustomDrawer.dart';
 import '../widgets/CustomLocationAppBar.dart';
-import 'BookingScreen.dart';
+import 'service/BookingScreen.dart';
 import '../screens/auth/ProfileScreen.dart';
 
 class HomePage extends StatefulWidget {
