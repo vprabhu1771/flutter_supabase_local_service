@@ -5,7 +5,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../admin/AdminDashboard.dart';
 import '../../freelancer/FreelancerDashboard.dart';
 import '../HomePage.dart';
-import '../HomeScreen.dart';
 import 'RegisterScreen.dart';
 
 final supabase = Supabase.instance.client;
@@ -20,19 +19,19 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-
   final TextEditingController emailController = TextEditingController();
-
   final TextEditingController passwordController = TextEditingController();
 
-  String _selectedRole = 'Admin';
+  final Map<String, String> _roleMap = {
+    'Customer': 'customer',
+    'Freelancer': 'delivery',
+    'Admin': 'admin',
+  };
 
-  final List<String> _roles = ['Customer', 'Delivery', 'Admin'];
+  String _selectedRole = 'admin'; // Default value stored
 
   final storage = FlutterSecureStorage(); // Secure storage instance
-
   bool _isPasswordVisible = false; // Track password visibility
-
   String? userId;
 
   @override
@@ -47,15 +46,11 @@ class _LoginScreenState extends State<LoginScreen> {
       final response = await Supabase.instance.client
           .from('user_roles')
           .select('roles(id, name)')
-      // .select('*')
           .eq('user_id', userId)
           .maybeSingle(); // Avoids crash if no rows are found
 
-      print(response.toString());
-
       if (response != null && response['roles'] != null) {
         final role = response['roles']['name'];
-        print("Role: $role");
         navigateBasedOnRole(role);
       } else {
         print("No role found for user: $userId");
@@ -65,18 +60,22 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-
-
   void navigateBasedOnRole(String role) {
     if (role == 'admin') {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => AdminDashboard(title: "Admin Dashboard",)));
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (_) => AdminDashboard(title: "Admin Dashboard")));
     } else if (role == 'customer') {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomePage()));
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (_) => HomePage()));
     } else if (role == 'delivery') {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => FreelancerDashboard(title: "Freelancer Dashboard",)));
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (_) => FreelancerDashboard(title: "Freelancer Dashboard")));
     }
   }
-
 
   Future<void> signIn() async {
     try {
@@ -93,19 +92,13 @@ class _LoginScreenState extends State<LoginScreen> {
           SnackBar(content: Text('Login successful!')),
         );
 
-        // print(supabase.auth.currentUser?.id);
         setState(() {
           userId = supabase.auth.currentUser?.id;
         });
 
-        print(userId);
-
-        // Navigate to home screen
-        // Navigator.pop(context);
-        // Navigator.of(context).push(
-        //   MaterialPageRoute(builder: (context) => HomePage()),
-        // );
-        fetchUserRole(userId!);
+        if (userId != null) {
+          fetchUserRole(userId!);
+        }
       }
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -124,7 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             // Logo at the Top
             Image.asset(
-              'assets/splash_logo.jpg',  // Make sure to add your logo in assets folder
+              'assets/splash_logo.jpg', // Make sure to add your logo in assets folder
               height: 100,
             ),
             SizedBox(height: 20),
@@ -161,10 +154,10 @@ class _LoginScreenState extends State<LoginScreen> {
             // Role Dropdown
             DropdownButtonFormField<String>(
               value: _selectedRole,
-              items: _roles.map((role) {
+              items: _roleMap.entries.map((entry) {
                 return DropdownMenuItem(
-                  value: role,
-                  child: Text(role),
+                  value: entry.value, // Pass the actual value
+                  child: Text(entry.key), // Display user-friendly name
                 );
               }).toList(),
               decoration: InputDecoration(
@@ -178,14 +171,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   _selectedRole = value!;
                 });
 
-                // Set email & password based on role
-                if (_selectedRole == 'Customer') {
+                // Set email & password based on role selection
+                if (_selectedRole == 'customer') {
                   emailController.text = "mani_maran@gmail.com";
                   passwordController.text = "admin@123";
-                } else if (_selectedRole == 'Delivery') {
+                } else if (_selectedRole == 'delivery') {
                   emailController.text = "prabhu@gmail.com";
                   passwordController.text = "admin@123";
-                } else if (_selectedRole == 'Admin') {
+                } else if (_selectedRole == 'admin') {
                   emailController.text = "admin@gmail.com";
                   passwordController.text = "admin@123";
                 }
