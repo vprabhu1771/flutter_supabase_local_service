@@ -1,40 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/UiProvider.dart';
-import 'package:provider/provider.dart';
 
-class SettingScreen extends StatefulWidget {
-
+class SettingScreen extends ConsumerWidget {
   final String title;
 
   const SettingScreen({super.key, required this.title});
 
   @override
-  State<SettingScreen> createState() => _SettingScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isDark = ref.watch(uiProvider); // Get the current theme state
+    final uiNotifier = ref.read(uiProvider.notifier); // Get the notifier
 
-class _SettingScreenState extends State<SettingScreen> {
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(title),
       ),
-      body: Consumer<UiProvider>(
-        builder: (context, UiProvider notifier, child) {
-          return Column(
-            children: [
-              ListTile(
-                leading: Icon(Icons.dark_mode),
-                title: Text("Dark Theme"),
-                trailing: Switch(
-                  onChanged: (value) { notifier.changeTheme(); },
-                  value: notifier.isDark,
-                ),
-              )
-            ],
-          );
-        },
+      body: Column(
+        children: [
+          ListTile(
+            leading: const Icon(Icons.dark_mode),
+            title: const Text("Dark Theme"),
+            trailing: Switch(
+              value: isDark,
+              onChanged: (value) {
+                uiNotifier.toggleTheme(); // Use `toggleTheme()` instead of `changeTheme()`
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

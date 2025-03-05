@@ -8,6 +8,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../screens/HomePage.dart';
 import '../screens/HomeScreen.dart';
+import '../screens/SettingScreen.dart';
 import '../screens/auth/LoginScreen.dart';
 import '../screens/auth/ProfileScreen.dart';
 import '../screens/auth/RegisterScreen.dart';
@@ -142,13 +143,13 @@ class CustomDrawer extends StatelessWidget {
                   leading: Icon(Icons.settings),
                   title: Text('Settings'),
                   onTap: () {
-                    // Navigator.pop(context);
-                    // Navigator.push(
-                    //   parentContext,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => SettingScreen(title: 'Settings'),
-                    //   ),
-                    // );
+                    Navigator.pop(context);
+                    Navigator.push(
+                      parentContext,
+                      MaterialPageRoute(
+                        builder: (context) => SettingScreen(title: 'Settings'),
+                      ),
+                    );
                   },
                 ),
                 Divider(),
