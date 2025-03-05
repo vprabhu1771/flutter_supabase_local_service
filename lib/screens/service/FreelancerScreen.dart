@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_supabase_local_service/models/UserSubCategory.dart';
-import 'package:flutter_supabase_local_service/screens/service/BookingScreen.dart';
+import 'package:flutter_supabase_local_service/screens/service/MyBookingScreen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../models/SubCategory.dart';
 import './BookServiceScreen.dart';
@@ -20,6 +20,8 @@ class _FreelancerScreenState extends State<FreelancerScreen> {
   List<UserSubCategory> users = [];
   bool isLoading = true;
 
+  late String subCategoryName;
+
   @override
   void initState() {
     super.initState();
@@ -30,10 +32,18 @@ class _FreelancerScreenState extends State<FreelancerScreen> {
     try {
       final response = await supabase
           .from('freelancer')
-          .select('user_id, users(*)')
+          .select('user_id, users(*), sub_category:sub_categories(*)')
           .eq('sub_category_id', widget.subCategory.id);
 
       print('Raw data from Supabase: $response'); // Debugging output
+
+      // Access the first item if the response is a list
+      if (response.isNotEmpty) {
+        final subCategory = response[0]['sub_category']; // Access sub_category object
+        subCategoryName = subCategory['name']; // Get the name field
+
+        print('Sub-category Name: $subCategoryName');
+      }
 
       List<UserSubCategory> fetchedUsers = response
           .map<UserSubCategory>((row) => UserSubCategory.fromJson(row))
@@ -74,7 +84,7 @@ class _FreelancerScreenState extends State<FreelancerScreen> {
 
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => BookServiceScreen(freelanceId: user.id,),
+                  builder: (context) => BookServiceScreen(freelanceId: user.id, subcategory: subCategoryName),
                 ),
               );
 

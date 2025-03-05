@@ -6,23 +6,26 @@ import 'package:geolocator/geolocator.dart';
 import '../services/LocationService.dart';
 import '../widgets/CustomDrawer.dart';
 import '../widgets/CustomLocationAppBar.dart';
-import 'service/BookingScreen.dart';
+import 'service/MyBookingScreen.dart';
 import '../screens/auth/ProfileScreen.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+
+  final int initialTabIndex;
+
+  const HomePage({super.key, this.initialTabIndex = 0}); // Default to Home tab
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
-  int _selectedIndex = 0;
+  late int _selectedIndex; // Make it late to initialize in initState
 
   // Tabs and corresponding titles
   final List<Widget> _tabs = [
     CategoryScreen(title: "Home"),
-    BookingScreen(title: "Bookings"),
+    MyBookingScreen(title: "My Bookings"),
     ProfileScreen(title: 'Profile'),
   ];
 
@@ -42,7 +45,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-
+    _selectedIndex = widget.initialTabIndex; // Set selected tab index
     _getCurrentLocation();
   }
 

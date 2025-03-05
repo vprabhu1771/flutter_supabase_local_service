@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_supabase_local_service/screens/service/BookingScreen.dart';
+import 'package:flutter_supabase_local_service/screens/service/MyBookingScreen.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+import 'ServiceBookingSuccessScreen.dart';
 
 final selectedDateProvider = StateProvider<DateTime?>((ref) => null);
 final selectedTimeSlotProvider = StateProvider<String?>((ref) => null);
@@ -10,12 +12,16 @@ final selectedTimeSlotProvider = StateProvider<String?>((ref) => null);
 class BookServiceScreen extends ConsumerWidget {
 
   final String freelanceId;
+  final String subcategory;
 
   final SupabaseClient supabase = Supabase.instance.client;
 
-  BookServiceScreen({required this.freelanceId, Key? key}) : super(key: key);
+  BookServiceScreen({required this.freelanceId, required this.subcategory, Key? key}) : super(key: key);
 
   Future<void> _bookService(BuildContext context, WidgetRef ref) async {
+
+    print("freelancer id ${freelanceId}");
+
     final selectedDate = ref.read(selectedDateProvider);
     final selectedTimeSlot = ref.read(selectedTimeSlotProvider);
 
@@ -30,9 +36,25 @@ class BookServiceScreen extends ConsumerWidget {
 
     try {
 
-      final providerResponse = await supabase.from('freelancer').select().eq('user_id', freelanceId).single();
+      // final providerResponse = await supabase.from('freelancer').select("freelancer:users(*)").eq('user_id', freelanceId).single();
 
-      print(providerResponse);
+      final providerResponse = await supabase
+          .from('freelancer')
+          .select("*, freelancer:users(*)")
+          .eq('user_id', freelanceId)
+          .single();
+
+      print('Provider Response: $providerResponse');
+
+
+      // Accessing freelancer details
+      final user = providerResponse['freelancer']; // This should contain the nested user data
+      final freelancerEmail = user['email'];  // Accessing email
+      final freelancerName = user['name'];    // Accessing name
+
+      print("Freelancer Email: $freelancerEmail");
+      print("Freelancer Name: $freelancerName");
+      print("providerResponse['user_id'] ${providerResponse['user_id']}");
 
       final response = await supabase.from('service_bookings').insert({
         'customer_id': customerId,
@@ -50,7 +72,8 @@ class BookServiceScreen extends ConsumerWidget {
 
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => BookingScreen(title: 'Bookings'),
+            // builder: (context) => MyBookingScreen(title: 'Bookings'),
+            builder: (context) => ServiceBookingSuccessScreen(title: 'Booking Success', serviceName: '', serviceProviderName: freelancerName,),
           ),
         );
 
@@ -75,6 +98,8 @@ class BookServiceScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text('Service Name ${subcategory}', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            SizedBox(height: 30,),
             Text('Select Date', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             InkWell(
               onTap: () async {

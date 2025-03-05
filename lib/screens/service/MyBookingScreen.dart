@@ -3,16 +3,16 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../models/Booking.dart';
 import '../../widgets/CustomDrawer.dart';
 
-class BookingScreen extends StatefulWidget {
+class MyBookingScreen extends StatefulWidget {
   final String title;
 
-  const BookingScreen({super.key, required this.title});
+  const MyBookingScreen({super.key, required this.title});
 
   @override
-  State<BookingScreen> createState() => _BookingScreenState();
+  State<MyBookingScreen> createState() => _MyBookingScreenState();
 }
 
-class _BookingScreenState extends State<BookingScreen> {
+class _MyBookingScreenState extends State<MyBookingScreen> {
   final SupabaseClient supabase = Supabase.instance.client;
 
   Future<List<Booking>> _fetchBookings() async {
