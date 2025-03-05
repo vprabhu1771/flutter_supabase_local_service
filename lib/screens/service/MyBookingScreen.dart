@@ -81,12 +81,12 @@ class _MyBookingScreenState extends State<MyBookingScreen> {
 
                       backgroundImage: NetworkImage('https://gravatar.com/avatar/$providerEmail'), // Replace with the user's image URL
                     ),
-                    title: Text(providerName, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                    title: Text("${providerName} (${booking.subCategory.name})", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(height: 4),
-                        Text('Date: $bookingDate', style: TextStyle(color: Colors.grey[700])),
+                        Text('Date: ${booking.formattedBookingDate}', style: TextStyle(color: Colors.grey[700])),
                         SizedBox(height: 4),
                         Chip(
                           label: Text(status.toUpperCase(), style: TextStyle(color: Colors.white)),

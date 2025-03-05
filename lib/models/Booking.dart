@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class Booking {
   final int id;
   final String bookingDate;
@@ -24,6 +26,16 @@ class Booking {
       freelancer: Freelancer.fromJson(json['freelancer']),
       subCategory: SubCategory.fromJson(json['sub_category']),
     );
+  }
+
+  // ✅ Format the date properly
+  String get formattedBookingDate {
+    try {
+      DateTime dateTime = DateTime.parse(bookingDate); // Parse date
+      return DateFormat('dd MMM yyyy, hh:mm a').format(dateTime); // Format date
+    } catch (e) {
+      return bookingDate; // Return original if parsing fails
+    }
   }
 }
 

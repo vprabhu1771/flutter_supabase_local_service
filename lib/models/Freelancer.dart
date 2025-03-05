@@ -1,17 +1,17 @@
 import 'User.dart';
 
-class UserSubCategory {
+class Freelancer {
   final String user_id;
   final User user;
 
-  UserSubCategory({
+  Freelancer({
     required this.user_id,
     required this.user
   });
 
 
-  factory UserSubCategory.fromJson(Map<String, dynamic> json) {
-    return UserSubCategory(
+  factory Freelancer.fromJson(Map<String, dynamic> json) {
+    return Freelancer(
       user_id: json['user_id'],
       user: User.fromJson(json['users']),
     );

@@ -6,6 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 
 
+import '../screens/HomePage.dart';
 import '../screens/HomeScreen.dart';
 import '../screens/auth/LoginScreen.dart';
 import '../screens/auth/ProfileScreen.dart';
@@ -108,13 +109,14 @@ class CustomDrawer extends StatelessWidget {
                   leading: Icon(Icons.calendar_month),
                   title: Text('Bookings'),
                   onTap: () {
-                    // Navigator.pop(context);
-                    // Navigator.push(
-                    //   parentContext,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => GoldSchemeScreen(title: 'Gold Scheme'),
-                    //   ),
-                    // );
+                    // Navigate to HomePage first and pass the selected index for MyBookings
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HomePage(initialTabIndex: 1), // Open "Bookings" tab
+                      ),
+                          (route) => false, // Removes all previous routes from the stack
+                    );
                   },
                 ),
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_supabase_local_service/models/UserSubCategory.dart';
+import 'package:flutter_supabase_local_service/models/Freelancer.dart';
 import 'package:flutter_supabase_local_service/screens/service/MyBookingScreen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../models/SubCategory.dart';
@@ -17,7 +17,7 @@ class FreelancerScreen extends StatefulWidget {
 class _FreelancerScreenState extends State<FreelancerScreen> {
   final supabase = Supabase.instance.client;
 
-  List<UserSubCategory> users = [];
+  List<Freelancer> users = [];
   bool isLoading = true;
 
   late String subCategoryName;
@@ -45,8 +45,8 @@ class _FreelancerScreenState extends State<FreelancerScreen> {
         print('Sub-category Name: $subCategoryName');
       }
 
-      List<UserSubCategory> fetchedUsers = response
-          .map<UserSubCategory>((row) => UserSubCategory.fromJson(row))
+      List<Freelancer> fetchedUsers = response
+          .map<Freelancer>((row) => Freelancer.fromJson(row))
           .toList();
 
       setState(() {
