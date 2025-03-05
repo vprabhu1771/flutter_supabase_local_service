@@ -90,9 +90,11 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
                       enlargeCenterPage: true,
                       aspectRatio: 2.0,
                       onPageChanged: (index, reason) {
-                        setState(() {
-                          _current = index;
-                        });
+                        // setState(() {
+                        //   _current = index;
+                        // });
+
+                        _current = index; // Avoid calling setState here
                       },
                     ),
                   ),
