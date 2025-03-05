@@ -22,9 +22,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
   String searchQuery = '';
 
   final List<String> imgList = [
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiVSWbVub0mqWA1pqOwvHitnAFtdXHVt-NKA&s',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiVSWbVub0mqWA1pqOwvHitnAFtdXHVt-NKA&s',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiVSWbVub0mqWA1pqOwvHitnAFtdXHVt-NKA&s',
+    'https://bezzyxfbmfykhwqqioys.supabase.co/storage/v1/object/public/assets/local_service_carousel/appliance.jpg',
+    'https://bezzyxfbmfykhwqqioys.supabase.co/storage/v1/object/public/assets/local_service_carousel/bike_mechanic.jpeg',
+    'https://bezzyxfbmfykhwqqioys.supabase.co/storage/v1/object/public/assets/local_service_carousel/carpenter.jpeg',
   ];
 
   List<Widget> get imageSliders => imgList
