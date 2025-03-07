@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_supabase_local_service/freelancer/FreelancerDashboard.dart';
 import 'package:flutter_supabase_local_service/freelancer/YourBookingScreen.dart';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -89,6 +90,20 @@ class CustomDrawer extends StatelessWidget {
                 ),
 
               ] else if (role == 'delivery') ...[
+
+                ListTile(
+                  leading: Icon(Icons.calendar_month),
+                  title: Text('Dashboard'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      parentContext,
+                      MaterialPageRoute(
+                        builder: (context) => FreelancerDashboard(title: 'Freelaner Dashboard'),
+                      ),
+                    );
+                  },
+                ),
 
                 ListTile(
                   leading: Icon(Icons.calendar_month),
