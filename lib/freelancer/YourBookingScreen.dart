@@ -15,68 +15,120 @@ class YourBookingScreen extends StatefulWidget {
 class _YourBookingScreenState extends State<YourBookingScreen> {
   final SupabaseClient supabase = Supabase.instance.client;
   String? userId;
+  String selectedFilter = 'all';
 
   @override
   void initState() {
     super.initState();
-    setState(() {
-      userId = supabase.auth.currentUser?.id;
-    });
+    userId = supabase.auth.currentUser?.id;
+    _fetchAllBookings();
   }
 
-  Future<List<Booking>> _fetchBookings() async {
+  Future<List<Booking>> _fetchAllBookings() async {
     final response = await supabase
         .from('service_bookings')
         .select('''
-          id,
-          booking_date,
-          status,
-          customer:users(*),
-          freelancer:freelancer(*, users(*)),
-          sub_category:sub_categories(*)
-        ''')
+        id,
+        booking_date,
+        status,
+        customer:users(*),
+        freelancer:freelancer(*, users(*)),
+        sub_category:sub_categories(*)
+      ''')
         .order('booking_date', ascending: false);
 
-    print("Fetched Bookings: $response"); // Debug print
+    if (response is List) {
+      return response.map((data) => Booking.fromJson(data)).toList();
+    }
+    return [];
+  }
 
-    if (response != null && response is List) {
+  Future<List<Booking>> _fetchBookingsByStatus({String? status}) async {
+    final response = await supabase
+        .from('service_bookings')
+        .select('''
+        id,
+        booking_date,
+        status,
+        customer:users(*),
+        freelancer:freelancer(*, users(*)),
+        sub_category:sub_categories(*)
+      ''')
+        .eq('status', status as Object)
+        .order('booking_date', ascending: false);
+
+    if (response is List) {
       return response.map((data) => Booking.fromJson(data)).toList();
     }
     return [];
   }
 
   Future<void> _updateBookingStatus(int bookingId, String newStatus) async {
-    final response = await supabase
-        .from('service_bookings')
-        .update({'status': newStatus})
-        .eq('id', bookingId);
+    await supabase.from('service_bookings').update({'status': newStatus}).eq('id', bookingId);
+    setState(() {});
+  }
 
-    if (response == null) {
-      setState(() {}); // Refresh the UI
-    } else {
-      print('Error updating status: ${response.error!.message}');
+  Color _getStatusColor(String status) {
+    switch (status) {
+      case 'confirmed':
+        return Colors.green;
+      case 'pending':
+        return Colors.orange;
+      case 'canceled':
+        return Colors.red;
+      default:
+        return Colors.grey;
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.title)),
+      appBar: AppBar(
+        title: Text(widget.title),
+        centerTitle: true,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: DropdownButton<String>(
+              value: selectedFilter,
+              icon: Icon(Icons.filter_list, color: Colors.white),
+              dropdownColor: Colors.white,
+              style: TextStyle(color: Colors.black),
+              underline: SizedBox(),
+              items: [
+                DropdownMenuItem(value: 'all', child: Text('All')),
+                DropdownMenuItem(value: 'confirmed', child: Text('Confirmed')),
+                DropdownMenuItem(value: 'pending', child: Text('Pending')),
+                DropdownMenuItem(value: 'canceled', child: Text('Canceled')),
+              ],
+              onChanged: (value) {
+                setState(() {
+                  selectedFilter = value!;
+                });
+              },
+            ),
+          ),
+        ],
+      ),
       drawer: CustomDrawer(parentContext: context),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.blue.shade50, Colors.white],
+            colors: [Colors.blue.shade100, Colors.white],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
         ),
         child: FutureBuilder<List<Booking>>(
-          future: _fetchBookings(),
+          future: selectedFilter == 'all'
+              ? _fetchAllBookings()
+              : _fetchBookingsByStatus(status: selectedFilter),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError || snapshot.data == null || snapshot.data!.isEmpty) {
+            }
+            if (snapshot.hasError || snapshot.data == null || snapshot.data!.isEmpty) {
               return Center(
                   child: Text('No bookings found.',
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)));
@@ -95,28 +147,27 @@ class _YourBookingScreenState extends State<YourBookingScreen> {
                 final status = booking.status;
 
                 return Card(
-                  margin: EdgeInsets.only(bottom: 12),
-                  elevation: 3,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  margin: EdgeInsets.only(bottom: 16),
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  shadowColor: Colors.black54,
                   child: ListTile(
                     contentPadding: EdgeInsets.all(16),
                     leading: CircleAvatar(
-                      backgroundImage: NetworkImage(
-                          'https://gravatar.com/avatar/$providerEmail'), // Replace with actual image URL
+                      backgroundImage: NetworkImage('https://gravatar.com/avatar/$providerEmail'),
+                      radius: 30,
                     ),
                     title: Text(providerName,
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 4),
+                        SizedBox(height: 8),
                         Text('Date: $bookingDate', style: TextStyle(color: Colors.grey[700])),
-                        SizedBox(height: 4),
+                        SizedBox(height: 8),
                         Chip(
-                          label: Text(status.toUpperCase(),
-                              style: TextStyle(color: Colors.white)),
-                          backgroundColor:
-                          status == 'confirmed' ? Colors.green : Colors.orange,
+                          label: Text(status.toUpperCase(), style: TextStyle(color: Colors.white)),
+                          backgroundColor: _getStatusColor(status),
                         ),
                       ],
                     ),
@@ -129,7 +180,7 @@ class _YourBookingScreenState extends State<YourBookingScreen> {
                         PopupMenuItem(value: 'pending', child: Text('Pending')),
                         PopupMenuItem(value: 'canceled', child: Text('Cancel')),
                       ],
-                      icon: Icon(Icons.more_vert),
+                      icon: Icon(Icons.more_vert, color: Colors.grey[700]),
                     ),
                   ),
                 );
