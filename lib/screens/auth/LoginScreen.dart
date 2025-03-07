@@ -49,6 +49,8 @@ class _LoginScreenState extends State<LoginScreen> {
           .eq('user_id', userId)
           .maybeSingle(); // Avoids crash if no rows are found
 
+      print(response.toString());
+
       if (response != null && response['roles'] != null) {
         final role = response['roles']['name'];
         navigateBasedOnRole(role);
