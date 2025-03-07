@@ -5,8 +5,9 @@ import '../widgets/CustomDrawer.dart';
 
 class YourBookingScreen extends StatefulWidget {
   final String title;
+  final String filter;
 
-  const YourBookingScreen({super.key, required this.title});
+  const YourBookingScreen({super.key, required this.title, required this.filter});
 
   @override
   State<YourBookingScreen> createState() => _YourBookingScreenState();
@@ -15,13 +16,23 @@ class YourBookingScreen extends StatefulWidget {
 class _YourBookingScreenState extends State<YourBookingScreen> {
   final SupabaseClient supabase = Supabase.instance.client;
   String? userId;
-  String selectedFilter = 'all';
+  late String selectedFilter;
+  late Future<List<Booking>> bookingsFuture;
 
   @override
   void initState() {
     super.initState();
     userId = supabase.auth.currentUser?.id;
-    _fetchAllBookings();
+    selectedFilter = widget.filter;
+    _fetchBookings();
+  }
+
+  void _fetchBookings() {
+    setState(() {
+      bookingsFuture = selectedFilter == 'all'
+          ? _fetchAllBookings()
+          : _fetchBookingsByStatus(status: selectedFilter);
+    });
   }
 
   Future<List<Booking>> _fetchAllBookings() async {
@@ -43,7 +54,7 @@ class _YourBookingScreenState extends State<YourBookingScreen> {
     return [];
   }
 
-  Future<List<Booking>> _fetchBookingsByStatus({String? status}) async {
+  Future<List<Booking>> _fetchBookingsByStatus({required String status}) async {
     final response = await supabase
         .from('service_bookings')
         .select('''
@@ -54,7 +65,7 @@ class _YourBookingScreenState extends State<YourBookingScreen> {
         freelancer:freelancer(*, users(*)),
         sub_category:sub_categories(*)
       ''')
-        .eq('status', status as Object)
+        .eq('status', status)
         .order('booking_date', ascending: false);
 
     if (response is List) {
@@ -65,7 +76,7 @@ class _YourBookingScreenState extends State<YourBookingScreen> {
 
   Future<void> _updateBookingStatus(int bookingId, String newStatus) async {
     await supabase.from('service_bookings').update({'status': newStatus}).eq('id', bookingId);
-    setState(() {});
+    _fetchBookings();
   }
 
   Color _getStatusColor(String status) {
@@ -105,6 +116,7 @@ class _YourBookingScreenState extends State<YourBookingScreen> {
               onChanged: (value) {
                 setState(() {
                   selectedFilter = value!;
+                  _fetchBookings();
                 });
               },
             ),
@@ -121,9 +133,7 @@ class _YourBookingScreenState extends State<YourBookingScreen> {
           ),
         ),
         child: FutureBuilder<List<Booking>>(
-          future: selectedFilter == 'all'
-              ? _fetchAllBookings()
-              : _fetchBookingsByStatus(status: selectedFilter),
+          future: bookingsFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
