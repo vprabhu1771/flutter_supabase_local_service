@@ -16,9 +16,9 @@ CREATE TABLE service_bookings (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT fk_customer FOREIGN KEY (customer_id) REFERENCES users(id) ON DELETE CASCADE,
-    CONSTRAINT fk_provider FOREIGN KEY (freelancer_id) REFERENCES freelancer(id) ON DELETE CASCADE,
-    CONSTRAINT fk_sub_category FOREIGN KEY (sub_category_id) REFERENCES sub_categories(id) ON DELETE CASCADE
+    FOREIGN KEY (customer_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (freelancer_id) REFERENCES freelancer(id) ON DELETE CASCADE,
+    FOREIGN KEY (sub_category_id) REFERENCES sub_categories(id) ON DELETE CASCADE
 );
 ```
 ---
