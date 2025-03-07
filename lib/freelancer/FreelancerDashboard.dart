@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_supabase_local_service/freelancer/YourBookingScreen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../widgets/CustomDrawer.dart';
 
@@ -49,12 +50,12 @@ class _FreelancerDashboardState extends State<FreelancerDashboard> {
       if (response != null && response.isNotEmpty) {
         int pending = response.where((booking) => booking['status'] == 'pending').length;
         int confirmed = response.where((booking) => booking['status'] == 'confirmed').length;
-        int canceled = response.where((booking) => booking['status'] == 'cancel').length;
+        int canceled = response.where((booking) => booking['status'] == 'canceled').length;
 
         setState(() {
           pendingBookings = pending;
           confirmedBookings = confirmed;
-          canceledBookings = confirmed;
+          canceledBookings = canceled;
         });
 
         print(pending);
@@ -144,23 +145,47 @@ class _FreelancerDashboardState extends State<FreelancerDashboard> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildOrderStatus(
-                  label: 'Pending',
-                  count: pendingBookings,
-                  color: Colors.orange,
-                  icon: Icons.pending_actions,
+                GestureDetector(
+                  onTap: (){
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => YourBookingScreen(title: 'Your Bookings', filter: 'pending'))
+                    );
+                  },
+                  child: _buildOrderStatus(
+                    label: 'Pending',
+                    count: pendingBookings,
+                    color: Colors.orange,
+                    icon: Icons.pending_actions,
+                  ),
                 ),
-                _buildOrderStatus(
-                  label: 'Completed',
-                  count: confirmedBookings,
-                  color: Colors.green,
-                  icon: Icons.check_circle_outline,
+                GestureDetector(
+                  onTap: (){
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => YourBookingScreen(title: 'Your Bookings', filter: 'completed'))
+                    );
+                  },
+                  child: _buildOrderStatus(
+                    label: 'Completed',
+                    count: confirmedBookings,
+                    color: Colors.green,
+                    icon: Icons.check_circle_outline,
+                  ),
                 ),
-                _buildOrderStatus(
-                  label: 'Canceled',
-                  count: canceledBookings,
-                  color: Colors.red,
-                  icon: Icons.cancel_outlined, // More appropriate icon for cancellation
+                GestureDetector(
+                  onTap: (){
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => YourBookingScreen(title: 'Your Bookings', filter: 'canceled'))
+                    );
+                  },
+                  child:_buildOrderStatus(
+                    label: 'Canceled',
+                    count: canceledBookings,
+                    color: Colors.red,
+                    icon: Icons.cancel_outlined, // More appropriate icon for cancellation
+                  ),
                 ),
               ],
             ),
