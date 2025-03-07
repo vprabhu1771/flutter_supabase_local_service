@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../models/Booking.dart';
 import '../../widgets/CustomDrawer.dart';
+import 'FreelancerDetailScreen.dart';
 
 class MyBookingScreen extends StatefulWidget {
   final String title;
@@ -66,37 +67,47 @@ class _MyBookingScreenState extends State<MyBookingScreen> {
                 final booking = bookings[index];
                 final providerName = booking.freelancer.user.name;
                 final providerEmail = booking.freelancer.user.email;
+                final providerPhone = booking.freelancer.user.phone;
                 final bookingDate = booking.bookingDate;
                 final status = booking.status;
 
-                return Card(
-                  margin: EdgeInsets.only(bottom: 12),
-                  elevation: 3,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                  child: ListTile(
-                    contentPadding: EdgeInsets.all(16),
-                    leading: CircleAvatar(
-                      // backgroundColor: Colors.blue.shade100,
-                      // child: Text(providerName[0].toUpperCase(), style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blue.shade900)),
+                return InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => FreelancerDetailScreen(name: providerName, email: providerEmail, phone: providerPhone,),
+                      ),
+                    );
+                  },
+                  child: Card(
+                    margin: EdgeInsets.only(bottom: 12),
+                    elevation: 3,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    child: ListTile(
+                      contentPadding: EdgeInsets.all(16),
+                      leading: CircleAvatar(
+                        // backgroundColor: Colors.blue.shade100,
+                        // child: Text(providerName[0].toUpperCase(), style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blue.shade900)),
 
-                      backgroundImage: NetworkImage('https://gravatar.com/avatar/$providerEmail'), // Replace with the user's image URL
-                    ),
-                    title: Text("${providerName} (${booking.subCategory.name})", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 4),
-                        Text('Date: ${booking.formattedBookingDate}', style: TextStyle(color: Colors.grey[700])),
-                        SizedBox(height: 4),
-                        Chip(
-                          label: Text(status.toUpperCase(), style: TextStyle(color: Colors.white)),
-                          backgroundColor: status == 'confirmed' ? Colors.green : Colors.orange,
-                        ),
-                      ],
-                    ),
-                    trailing: Icon(
-                      status == 'confirmed' ? Icons.check_circle : Icons.pending,
-                      color: status == 'confirmed' ? Colors.green : Colors.orange,
+                        backgroundImage: NetworkImage('https://gravatar.com/avatar/$providerEmail'), // Replace with the user's image URL
+                      ),
+                      title: Text("${providerName} (${booking.subCategory.name})", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 4),
+                          Text('Date: ${booking.formattedBookingDate}', style: TextStyle(color: Colors.grey[700])),
+                          SizedBox(height: 4),
+                          Chip(
+                            label: Text(status.toUpperCase(), style: TextStyle(color: Colors.white)),
+                            backgroundColor: status == 'confirmed' ? Colors.green : Colors.orange,
+                          ),
+                        ],
+                      ),
+                      trailing: Icon(
+                        status == 'confirmed' ? Icons.check_circle : Icons.pending,
+                        color: status == 'confirmed' ? Colors.green : Colors.orange,
+                      ),
                     ),
                   ),
                 );
