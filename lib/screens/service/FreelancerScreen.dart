@@ -76,7 +76,7 @@ class _FreelancerScreenState extends State<FreelancerScreen> {
               radius: 50,
               backgroundImage: NetworkImage('https://gravatar.com/avatar/${user!.email}'), // Replace with the user's image URL
             ),
-            title: Text(user.name),
+            title: Text("${user.name} (Freelancer)"),
 
             onTap: () {
 
