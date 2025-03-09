@@ -44,6 +44,7 @@ class Customer {
   final String name;
   final String email;
   final String phone;
+  final String image_path;
   final String createdAt;
 
   Customer({
@@ -51,6 +52,7 @@ class Customer {
     required this.name,
     required this.email,
     required this.phone,
+    required this.image_path,
     required this.createdAt,
   });
 
@@ -60,6 +62,7 @@ class Customer {
       name: json['name'],
       email: json['email'],
       phone: json['phone'],
+      image_path: json['image_path'],
       createdAt: json['created_at'],
     );
   }
