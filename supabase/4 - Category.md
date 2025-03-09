@@ -31,10 +31,19 @@ EXECUTE FUNCTION update_updated_at_column();
 ```sql
 -- Insert with default image_path ('default_image.png' will be used)
 INSERT INTO categories (name) VALUES
-('Cleaning Services'),
-('Plumbing'),
-('Electrical'),
-('Painting');
+('Painter'), 
+('Electrician'), 
+('Plumber'), 
+('Photography'), 
+('Carpentry'), 
+('Computer Services'), 
+('Pest Control'), 
+('Gardening'), 
+('AC Service'), 
+('Cleaning'), 
+('Water Purifier'), 
+('Refrigerator'), 
+('Events');
 ```
 
 ```sql
