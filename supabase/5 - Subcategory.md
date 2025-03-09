@@ -11,6 +11,14 @@ CREATE TABLE sub_categories (
 );
 ```
 
+
+```sql
+-- Insert with default image_path ('default_image.png' will be used)
+INSERT INTO categories (name) VALUES
+('Single Door Refrigeration'),
+('Double Door Refrigerator');
+```
+
 ```sql
 INSERT INTO "public"."sub_categories" ("id", "created_at", "name", "image_path", "category_id") VALUES 
 ('1', '2025-02-24 12:38:36.282137+00', 'Single Door Refrigeration', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRkMR5w4-0zgiZV8lB9yxbdNE4ubqgVq0C4w&s', '12'), 
