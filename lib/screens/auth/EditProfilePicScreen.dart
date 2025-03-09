@@ -64,6 +64,15 @@ class _EditProfilePicScreenState extends State<EditProfilePicScreen> {
 
       print(response.toString());
 
+      print('User metadata updated successfully.');
+
+      // Update the user table in the database with the new image path
+      final updateResponse = await supabase.from('users').update({
+        'image_path': imageUrl,
+      }).eq('id', user.id);
+
+      print("updateResponse ${updateResponse.toString()}");
+
       Navigator.pop(context, true); // Return success
     } catch (e) {
       print('Error uploading image: $e');

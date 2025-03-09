@@ -16,10 +16,8 @@ class FreelancerScreen extends StatefulWidget {
 
 class _FreelancerScreenState extends State<FreelancerScreen> {
   final supabase = Supabase.instance.client;
-
   List<Freelancer> users = [];
   bool isLoading = true;
-
   late String subCategoryName;
 
   @override
@@ -35,14 +33,9 @@ class _FreelancerScreenState extends State<FreelancerScreen> {
           .select('user_id, users(*), sub_category:sub_categories(*)')
           .eq('sub_category_id', widget.subCategory.id);
 
-      print('Raw data from Supabase: $response'); // Debugging output
-
-      // Access the first item if the response is a list
       if (response.isNotEmpty) {
-        final subCategory = response[0]['sub_category']; // Access sub_category object
-        subCategoryName = subCategory['name']; // Get the name field
-
-        print('Sub-category Name: $subCategoryName');
+        final subCategory = response[0]['sub_category'];
+        subCategoryName = subCategory['name'];
       }
 
       List<Freelancer> fetchedUsers = response
@@ -62,33 +55,50 @@ class _FreelancerScreenState extends State<FreelancerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.subCategory.name)),
+      appBar: AppBar(
+        title: Text(widget.subCategory.name, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+        centerTitle: true,
+        backgroundColor: Colors.blueAccent,
+      ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : users.isEmpty
-          ? const Center(child: Text("No users available"))
+          ? const Center(child: Text("No freelancers available", style: TextStyle(fontSize: 18)))
           : ListView.builder(
+        padding: EdgeInsets.all(12),
         itemCount: users.length,
         itemBuilder: (context, index) {
-          final user = users[index].user; // Assuming UserSubCategory has a `user` field
-          return ListTile(
-            leading: CircleAvatar(
-              radius: 50,
-              backgroundImage: NetworkImage('https://gravatar.com/avatar/${user!.email}'), // Replace with the user's image URL
-            ),
-            title: Text("${user.name} (Freelancer)"),
-
-            onTap: () {
-
-              Navigator.pop(context);
-
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => BookServiceScreen(freelanceId: user.id, subcategory: subCategoryName),
+          final user = users[index].user;
+          return Card(
+            margin: EdgeInsets.symmetric(vertical: 8),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            elevation: 4,
+            child: ListTile(
+              contentPadding: EdgeInsets.all(12),
+              leading: CircleAvatar(
+                radius: 35,
+                backgroundImage: NetworkImage(
+                  user?.image_path ?? 'https://gravatar.com/avatar/${user!.email}',
                 ),
-              );
-
-            },
+              ),
+              title: Text(
+                "${user.name} (Freelancer)",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              subtitle: Text("Tap to book this freelancer"),
+              trailing: Icon(Icons.arrow_forward_ios, color: Colors.blueAccent),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => BookServiceScreen(
+                      freelanceId: user.id,
+                      subcategory: subCategoryName,
+                    ),
+                  ),
+                );
+              },
+            ),
           );
         },
       ),
