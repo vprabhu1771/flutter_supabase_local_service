@@ -12,7 +12,7 @@ CREATE TABLE service_bookings (
     freelancer_user_id UUID NULL,
     sub_category_id BIGINT NOT NULL,
     booking_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status VARCHAR(20) DEFAULT 'pending', -- pending, confirmed, completed, cancelled
+    status VARCHAR(20) DEFAULT 'pending', -- pending, confirmed, completed, canceled
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
