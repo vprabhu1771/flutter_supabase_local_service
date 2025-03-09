@@ -5,6 +5,7 @@ import '../auth/EditProfileScreen.dart';
 
 import '../../widgets/CustomDrawer.dart';
 import '../HomeScreen.dart';
+import 'EditProfilePicScreen.dart';
 
 
 final supabase = Supabase.instance.client;
@@ -57,14 +58,50 @@ class _ProfileScreenState extends State<ProfileScreen> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
+
               // Profile Image View
               Center(
-                child: CircleAvatar(
-                  radius: 50,
-                  backgroundImage: NetworkImage('https://gravatar.com/avatar/${user!.email}'), // Replace with the user's image URL
-                  backgroundColor: Colors.grey[200],
+                child: Stack(
+                  children: [
+                    CircleAvatar(
+                      radius: 50,
+                      backgroundImage: NetworkImage(
+                          user?.userMetadata?['image_path'] ?? 'https://gravatar.com/avatar/${user!.email}'),
+                      backgroundColor: Colors.grey[200],
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: GestureDetector(
+                        onTap: () async {
+
+                          print(user?.userMetadata?['image_path']);
+
+                          bool? result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => EditProfilePicScreen(),
+                            ),
+                          );
+
+                          if (result == true) {
+                            // Refresh data after edit
+                            // Refresh UI
+                            await refreshUserData();
+                          }
+
+                        },
+                        child: CircleAvatar(
+                          radius: 18,
+                          backgroundColor: Colors.blue,
+                          child: Icon(Icons.edit, color: Colors.white, size: 18),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
+
               const SizedBox(height: 16),
 
               // Profile Details List
