@@ -36,3 +36,16 @@ AFTER INSERT ON auth.users
 FOR EACH ROW
 EXECUTE FUNCTION handle_new_user();
 ```
+
+INSERT INTO users (id, name, email, phone, created_at, updated_at)
+VALUES
+(gen_random_uuid(), 'Arun Kumar', 'arunkumar.tn@example.com', '+91 9876543210', NOW(), NOW()),
+(gen_random_uuid(), 'Priya Dharshini', 'priyadh.tn@example.com', '+91 9867543211', NOW(), NOW()),
+(gen_random_uuid(), 'Vignesh R', 'vignesh.r.tn@example.com', '+91 9956321478', NOW(), NOW()),
+(gen_random_uuid(), 'Swetha Raj', 'swetha.raj@example.com', '+91 9845236987', NOW(), NOW()),
+(gen_random_uuid(), 'Karthik S', 'karthik.s@example.com', '+91 9887456321', NOW(), NOW()),
+(gen_random_uuid(), 'Lakshmi Narayanan', 'lakshmi.n.tn@example.com', '+91 9786543212', NOW(), NOW()),
+(gen_random_uuid(), 'Deepak Kumar', 'deepak.kumar@example.com', '+91 9874123658', NOW(), NOW()),
+(gen_random_uuid(), 'Meena V', 'meena.v@example.com', '+91 9923658741', NOW(), NOW()),
+(gen_random_uuid(), 'Rajeshwaran P', 'rajesh.p@example.com', '+91 9845632147', NOW(), NOW()),
+(gen_random_uuid(), 'Harini B', 'harini.b@example.com', '+91 9764123589', NOW(), NOW());
