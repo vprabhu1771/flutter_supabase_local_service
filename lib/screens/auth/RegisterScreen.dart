@@ -28,6 +28,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _isLoading = false;
   bool _obscureText = true; // To toggle password visibility
 
+  String selectedRole = 'customer'; // Default role
+  List<String> roles = ['admin', 'freelancer', 'customer'];
+
   @override
   void initState() {
     super.initState();
@@ -42,7 +45,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     setState(() => _isLoading = true);
 
     try {
-      await supabase.auth.signUp(
+      final response = await supabase.auth.signUp(
         email: emailController.text,
         password: passwordController.text,
         data: {
@@ -51,8 +54,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
         },
       );
 
-      Fluttertoast.showToast(msg: "Registration Successful!");
-      signIn();
+      final userId = response.user?.id;
+
+      if (userId != null) {
+        await _assignRole(userId);
+        Fluttertoast.showToast(msg: "Registration Successful!");
+        signIn();
+      }
+
+      // Fluttertoast.showToast(msg: "Registration Successful!");
+      // signIn();
     } catch (error) {
       Fluttertoast.showToast(msg: "Error: ${error.toString()}");
       print("Error: ${error.toString()}");
@@ -90,24 +101,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
-  Future<void> insertUserRole(String userId) async {
+  Future<void> _assignRole(String userId) async {
     try {
-      final response = await Supabase.instance.client
-          .from('user_roles')
-          .select('roles(id, name)')
-          .eq('user_id', userId)
-          .maybeSingle(); // Avoids crash if no rows are found
+      // Get the role ID based on selected role name
+      final roleQuery = await supabase
+          .from('roles')
+          .select('id')
+          .eq('name', selectedRole)
+          .single();
 
-      print(response.toString());
+      final roleId = roleQuery['id'];
 
-      if (response != null && response['roles'] != null) {
-        final role = response['roles']['name'];
-        // navigateBasedOnRole(role);
-      } else {
-        print("No role found for user: $userId");
-      }
-    } catch (e) {
-      print("Error fetching role: $e");
+      // Assign the role to the user
+      await supabase.from('user_roles').insert({'user_id': userId, 'role_id': roleId});
+    } catch (error) {
+      print("Role assignment failed: $error");
     }
   }
 
