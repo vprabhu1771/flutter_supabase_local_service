@@ -31,10 +31,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   void initState() {
     super.initState();
-    nameController.text = "admin";
-    phoneController.text = "1234567890";
-    emailController.text = "admin@gmail.com";
-    passwordController.text = "admin@123";
+    // nameController.text = "admin";
+    // phoneController.text = "1234567890";
+    // emailController.text = "admin@gmail.com";
+    // passwordController.text = "admin@123";
   }
 
   Future<void> _signUp() async {
@@ -87,6 +87,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Login failed: $error')),
       );
+    }
+  }
+
+  Future<void> insertUserRole(String userId) async {
+    try {
+      final response = await Supabase.instance.client
+          .from('user_roles')
+          .select('roles(id, name)')
+          .eq('user_id', userId)
+          .maybeSingle(); // Avoids crash if no rows are found
+
+      print(response.toString());
+
+      if (response != null && response['roles'] != null) {
+        final role = response['roles']['name'];
+        // navigateBasedOnRole(role);
+      } else {
+        print("No role found for user: $userId");
+      }
+    } catch (e) {
+      print("Error fetching role: $e");
     }
   }
 
