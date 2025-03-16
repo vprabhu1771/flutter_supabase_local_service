@@ -27,7 +27,7 @@ class CustomDrawer extends StatelessWidget {
     await storage.delete(key: 'session');
     Navigator.pushReplacement(
       parentContext,
-      MaterialPageRoute(builder: (context) => HomeScreen(title: 'Home')),
+      MaterialPageRoute(builder: (context) => LoginScreen(title: 'Login')),
     );
   }
 
