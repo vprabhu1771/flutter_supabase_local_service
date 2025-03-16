@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_supabase_local_service/screens/HomePage.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -79,7 +80,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         );
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => HomeScreen(title: 'Home')),
+          MaterialPageRoute(builder: (context) => HomePage()),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -98,7 +99,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       final roleQuery = await supabase
           .from('roles')
           .select('id')
-          .eq('name', roleMap[selectedRoleKey])
+          .eq('name', roleMap[selectedRoleKey] as Object)
           .single();
 
       final roleId = roleQuery['id'];
@@ -176,9 +177,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
               _isLoading
                   ? CircularProgressIndicator()
                   : ElevatedButton(
-                      onPressed: _signUp,
-                      child: Text('Register'),
-                    ),
+                onPressed: _signUp,
+                child: Text('Register'),
+              ),
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pushReplacement(
