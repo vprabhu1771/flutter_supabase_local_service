@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_supabase_local_service/screens/HomePage.dart';
+import 'package:flutter_supabase_local_service/screens/auth/RegisterScreen.dart';
 import 'services/UiProvider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -36,7 +37,7 @@ class MyApp extends ConsumerWidget {
       themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
       theme: isDark ? uiNotifier.darkTheme : uiNotifier.greenTheme, // FIXED LINE
       darkTheme: uiNotifier.darkTheme,
-      home: const HomePage(),
+      home: const RegisterScreen(title: 'Register'),
     );
   }
 }
