@@ -29,7 +29,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _obscureText = true; // To toggle password visibility
 
   String selectedRole = 'customer'; // Default role
-  List<String> roles = ['admin', 'freelancer', 'customer'];
+  
+  final Map<String, String> _roleMap = {
+    'Customer': 'customer',
+    'Freelancer': 'delivery',
+    'Admin': 'admin',
+  };
 
   @override
   void initState() {
