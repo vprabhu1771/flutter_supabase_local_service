@@ -28,34 +28,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _isLoading = false;
   bool _obscureText = true; // To toggle password visibility
 
-  String selectedRole = 'customer'; // Default role
-  
-  final Map<String, String> _roleMap = {
-    'Customer': 'customer',
-    'Freelancer': 'delivery',
+  // Role mapping
+  final Map<String, String> roleMap = {
     'Admin': 'admin',
+    'Freelancer': 'freelancer',
+    'Customer': 'customer'
   };
 
-  @override
-  void initState() {
-    super.initState();
-    // nameController.text = "admin";
-    // phoneController.text = "1234567890";
-    // emailController.text = "admin@gmail.com";
-    // passwordController.text = "admin@123";
-  }
+  String selectedRoleKey = 'Customer'; // Default role
 
+  @override
   Future<void> _signUp() async {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _isLoading = true);
 
     try {
       final response = await supabase.auth.signUp(
-        email: emailController.text,
-        password: passwordController.text,
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
         data: {
-          'name': nameController.text, // Add the name field
-          'phone': phoneController.text, // Add the phone field
+          'name': nameController.text.trim(),
+          'phone': phoneController.text.trim(),
         },
       );
 
@@ -66,12 +59,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
         Fluttertoast.showToast(msg: "Registration Successful!");
         signIn();
       }
-
-      // Fluttertoast.showToast(msg: "Registration Successful!");
-      // signIn();
     } catch (error) {
       Fluttertoast.showToast(msg: "Error: ${error.toString()}");
-      print("Error: ${error.toString()}");
     }
     setState(() => _isLoading = false);
   }
@@ -85,13 +74,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
       if (response.session != null) {
         await storage.write(key: 'session', value: response.session!.accessToken);
-
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Login successful!')),
         );
-
-        Navigator.pop(context);
-        Navigator.of(context).push(
+        Navigator.pushReplacement(
+          context,
           MaterialPageRoute(builder: (context) => HomeScreen(title: 'Home')),
         );
       } else {
@@ -108,16 +95,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Future<void> _assignRole(String userId) async {
     try {
-      // Get the role ID based on selected role name
       final roleQuery = await supabase
           .from('roles')
           .select('id')
-          .eq('name', selectedRole)
+          .eq('name', roleMap[selectedRoleKey])
           .single();
 
       final roleId = roleQuery['id'];
-
-      // Assign the role to the user
       await supabase.from('user_roles').insert({'user_id': userId, 'role_id': roleId});
     } catch (error) {
       print("Role assignment failed: $error");
@@ -139,24 +123,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 controller: nameController,
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(labelText: 'Full Name'),
-                validator: (value) =>
-                value!.isEmpty ? 'Enter a valid Full Name' : null,
+                validator: (value) => value!.isEmpty ? 'Enter a valid Full Name' : null,
               ),
               SizedBox(height: 10),
               TextFormField(
                 controller: phoneController,
                 keyboardType: TextInputType.phone,
                 decoration: InputDecoration(labelText: 'Phone'),
-                validator: (value) =>
-                value!.isEmpty ? 'Enter a valid Phone' : null,
+                validator: (value) => value!.isEmpty ? 'Enter a valid Phone' : null,
               ),
               SizedBox(height: 10),
               TextFormField(
                 controller: emailController,
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(labelText: 'Email'),
-                validator: (value) =>
-                value!.isEmpty ? 'Enter a valid email' : null,
+                validator: (value) => value!.isEmpty ? 'Enter a valid email' : null,
               ),
               SizedBox(height: 10),
               TextFormField(
@@ -173,16 +154,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     },
                   ),
                 ),
-                validator: (value) =>
-                value!.length < 6 ? 'Password must be at least 6 characters' : null,
+                validator: (value) => value!.length < 6 ? 'Password must be at least 6 characters' : null,
+              ),
+              SizedBox(height: 10),
+              DropdownButtonFormField<String>(
+                value: selectedRoleKey,
+                items: roleMap.keys.map((String key) {
+                  return DropdownMenuItem<String>(
+                    value: key,
+                    child: Text(key),
+                  );
+                }).toList(),
+                onChanged: (newValue) {
+                  setState(() {
+                    selectedRoleKey = newValue!;
+                  });
+                },
+                decoration: InputDecoration(labelText: 'Select Role'),
               ),
               SizedBox(height: 20),
               _isLoading
                   ? CircularProgressIndicator()
                   : ElevatedButton(
-                onPressed: _signUp,
-                child: Text('Register'),
-              ),
+                      onPressed: _signUp,
+                      child: Text('Register'),
+                    ),
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pushReplacement(
