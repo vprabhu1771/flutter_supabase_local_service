@@ -96,18 +96,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Future<void> _assignRole(String userId) async {
     try {
+      print("Assigning role: ${roleMap[selectedRoleKey]} for user: $userId");
+
       final roleQuery = await supabase
           .from('roles')
           .select('id')
           .eq('name', roleMap[selectedRoleKey] as Object)
-          .single();
+          .maybeSingle();
+
+      if (roleQuery == null) {
+        print("Role not found: ${roleMap[selectedRoleKey]}");
+        return;
+      }
 
       final roleId = roleQuery['id'];
-      await supabase.from('user_roles').insert({'user_id': userId, 'role_id': roleId});
+      print("Role ID: $roleId");
+
+      await supabase.from('user_roles').insert({
+        'user_id': userId,
+        'role_id': roleId,
+      });
+
+      print("Role assigned successfully");
     } catch (error) {
       print("Role assignment failed: $error");
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
