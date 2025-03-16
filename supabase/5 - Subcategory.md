@@ -4,10 +4,19 @@ CREATE TABLE sub_categories (
     id BIGSERIAL PRIMARY KEY,
     category_id BIGINT NOT NULL,
     name VARCHAR(100) NOT NULL,
+    image_path VARCHAR(100) NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
 );
+```
+
+
+```sql
+-- Insert with default image_path ('default_image.png' will be used)
+INSERT INTO categories (name) VALUES
+('Single Door Refrigeration'),
+('Double Door Refrigerator');
 ```
 
 ```sql

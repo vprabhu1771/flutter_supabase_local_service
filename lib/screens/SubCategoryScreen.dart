@@ -23,9 +23,9 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
   int _current = 0;
 
   final List<String> imgList = [
-    'https://bezzyxfbmfykhwqqioys.supabase.co/storage/v1/object/public/assets/local_service_carousel/electrician.jpg',
-    'https://bezzyxfbmfykhwqqioys.supabase.co/storage/v1/object/public/assets/local_service_carousel/photographer.jpg',
-    'https://bezzyxfbmfykhwqqioys.supabase.co/storage/v1/object/public/assets/local_service_carousel/plumber.jpg',
+    'https://xxllfyzeciydpjwwyeef.supabase.co/storage/v1/object/public/assets/local_service_carousel/electrician.jpg',
+    'https://xxllfyzeciydpjwwyeef.supabase.co/storage/v1/object/public/assets/local_service_carousel/photographer.jpg',
+    'https://xxllfyzeciydpjwwyeef.supabase.co/storage/v1/object/public/assets/local_service_carousel/plumber.jpg',
   ];
 
   List<Widget> get imageSliders => imgList

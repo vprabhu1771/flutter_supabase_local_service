@@ -5,12 +5,14 @@ class FreelancerDetailScreen extends StatefulWidget {
   final String name;
   final String email;
   final String phone;
+  final String? imagePath;
 
   const FreelancerDetailScreen({
     super.key,
     required this.name,
     required this.email,
     required this.phone,
+    this.imagePath,
   });
 
   @override
@@ -30,43 +32,84 @@ class _FreelancerDetailScreenState extends State<FreelancerDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.name)),
+      appBar: AppBar(
+        title: Text("${widget.name} (Freelancer)"),
+        centerTitle: true,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Profile Avatar
             Center(
               child: CircleAvatar(
-                radius: 50,
-                backgroundImage: NetworkImage('https://gravatar.com/avatar/${widget.email}'),
+                radius: 60,
+                backgroundImage: NetworkImage(
+                  widget.imagePath ?? 'https://gravatar.com/avatar/${widget.email}',
+                ),
               ),
             ),
-            const SizedBox(height: 16),
-            Text("Name: ${widget.name}",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 8),
-            Text("Email: ${widget.email}", style: TextStyle(fontSize: 16)),
-            const SizedBox(height: 8),
-            Text("Phone: ${widget.phone}",
-                style: TextStyle(fontSize: 16, color: Colors.black)),
-            const SizedBox(height: 16),
-            Center(
-              child: ElevatedButton.icon(
-                onPressed: () => _callFreelancer(widget.phone),
-                icon: Icon(Icons.phone),
-                label: Text("Call Now"),
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                  textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+            const SizedBox(height: 20),
+
+            // Info Card
+            Card(
+              elevation: 3,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    _buildInfoRow(Icons.person, "Name", widget.name),
+                    _buildInfoRow(Icons.email, "Email", widget.email),
+                    _buildInfoRow(Icons.phone, "Phone", widget.phone),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            // Call Button
+            ElevatedButton.icon(
+              onPressed: () => _callFreelancer(widget.phone),
+              icon: Icon(Icons.phone, color: Colors.white),
+              label: Text("Call Now"),
+              style: ElevatedButton.styleFrom(
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                backgroundColor: Colors.green,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  // Reusable Widget for Info Rows
+  Widget _buildInfoRow(IconData icon, String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        children: [
+          Icon(icon, color: Colors.blue, size: 24),
+          const SizedBox(width: 12),
+          Text(
+            "$label: ",
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          Expanded(
+            child: Text(
+              value,
+              style: TextStyle(fontSize: 16, color: Colors.grey[800]),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
       ),
     );
   }

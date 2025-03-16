@@ -12,13 +12,13 @@ CREATE TABLE service_bookings (
     freelancer_user_id UUID NULL,
     sub_category_id BIGINT NOT NULL,
     booking_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status VARCHAR(20) DEFAULT 'pending', -- pending, confirmed, completed, cancelled
+    status VARCHAR(20) DEFAULT 'pending', -- pending, confirmed, completed, canceled
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT fk_customer FOREIGN KEY (customer_id) REFERENCES users(id) ON DELETE CASCADE,
-    CONSTRAINT fk_provider FOREIGN KEY (freelancer_id) REFERENCES freelancer(id) ON DELETE CASCADE,
-    CONSTRAINT fk_sub_category FOREIGN KEY (sub_category_id) REFERENCES sub_categories(id) ON DELETE CASCADE
+    FOREIGN KEY (customer_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (freelancer_id) REFERENCES freelancer(id) ON DELETE CASCADE,
+    FOREIGN KEY (sub_category_id) REFERENCES sub_categories(id) ON DELETE CASCADE
 );
 ```
 ---
