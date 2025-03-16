@@ -25,7 +25,7 @@ class CustomDrawer extends StatelessWidget {
   Future<void> signOut() async {
     await supabase.auth.signOut();
     await storage.delete(key: 'session');
-    Navigator.pushReplacement(
+    Navigator.push(
       parentContext,
       MaterialPageRoute(builder: (context) => LoginScreen(title: 'Login')),
     );
