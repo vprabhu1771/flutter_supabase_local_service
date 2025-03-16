@@ -65,7 +65,7 @@ class UiProvider extends Notifier<bool> {
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         // backgroundColor: Colors.pink, // TextButton color
-        foregroundColor: Colors.white, // TextButton color
+        foregroundColor: Color(0xFF69b82f), // TextButton color
       ),
     ),
 
