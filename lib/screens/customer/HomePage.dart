@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_supabase_local_service/screens/CategoryScreen.dart';
-import 'package:flutter_supabase_local_service/screens/HomeScreen.dart';
+import 'package:flutter_supabase_local_service/screens/customer/CategoryScreen.dart';
 import 'package:geolocator/geolocator.dart';
 
-import '../services/LocationService.dart';
-import '../widgets/CustomDrawer.dart';
-import '../widgets/CustomLocationAppBar.dart';
+import '../../services/LocationService.dart';
+import '../../widgets/CustomDrawer.dart';
+import '../../widgets/CustomLocationAppBar.dart';
+import '../common/auth/ProfileScreen.dart';
 import 'service/MyBookingScreen.dart';
-import '../screens/auth/ProfileScreen.dart';
 
 class HomePage extends StatefulWidget {
 

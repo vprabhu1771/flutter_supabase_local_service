@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_supabase_local_service/freelancer/FreelancerDashboard.dart';
-import 'package:flutter_supabase_local_service/freelancer/YourBookingScreen.dart';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 
-
-import '../screens/HomePage.dart';
-import '../screens/HomeScreen.dart';
-import '../screens/SettingScreen.dart';
-import '../screens/auth/LoginScreen.dart';
-import '../screens/auth/ProfileScreen.dart';
-import '../screens/auth/RegisterScreen.dart';
+import '../screens/common/SettingScreen.dart';
+import '../screens/common/auth/LoginScreen.dart';
+import '../screens/common/auth/ProfileScreen.dart';
+import '../screens/common/auth/RegisterScreen.dart';
+import '../screens/customer/HomePage.dart';
+import '../screens/freelancer/FreelancerDashboard.dart';
+import '../screens/freelancer/FreelancerYourBookingScreen.dart';
 
 class CustomDrawer extends StatelessWidget {
   final BuildContext parentContext;

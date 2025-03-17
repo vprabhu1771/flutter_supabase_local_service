@@ -1,8 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_supabase_local_service/screens/SubCategoryScreen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../models/Category.dart';
+import '../../models/Category.dart';
+import 'SubCategoryScreen.dart';
 
 class CategoryScreen extends StatefulWidget {
   final String title;

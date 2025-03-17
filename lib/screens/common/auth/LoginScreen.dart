@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+
 import '../../admin/AdminDashboard.dart';
+import '../../customer/HomePage.dart';
 import '../../freelancer/FreelancerDashboard.dart';
-import '../HomePage.dart';
 import 'RegisterScreen.dart';
 
 final supabase = Supabase.instance.client;

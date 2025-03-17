@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_supabase_local_service/freelancer/YourBookingScreen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../widgets/CustomDrawer.dart';
+
+import '../../widgets/CustomDrawer.dart';
+import 'FreelancerYourBookingScreen.dart';
 
 final SupabaseClient supabase = Supabase.instance.client;
 

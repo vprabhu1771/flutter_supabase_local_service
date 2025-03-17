@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import '../auth/EditProfileScreen.dart';
+import '../../customer/HomeScreen.dart';
+import 'EditProfileScreen.dart';
 
-import '../../widgets/CustomDrawer.dart';
-import '../HomeScreen.dart';
 import 'EditProfilePicScreen.dart';
 
 

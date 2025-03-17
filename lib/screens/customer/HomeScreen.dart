@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/CustomDrawer.dart';
+import '../../widgets/CustomDrawer.dart';
 
 class HomeScreen extends StatefulWidget {
 

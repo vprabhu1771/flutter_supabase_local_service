@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../models/Booking.dart';
-import '../../widgets/CustomDrawer.dart';
+import '../../../models/Booking.dart';
+import '../../../widgets/CustomDrawer.dart';
 import 'FreelancerDetailScreen.dart';
 
 class MyBookingScreen extends StatefulWidget {

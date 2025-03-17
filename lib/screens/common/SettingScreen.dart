@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../services/UiProvider.dart';
+import '../../services/UiProvider.dart';
 
 class SettingScreen extends ConsumerWidget {
   final String title;

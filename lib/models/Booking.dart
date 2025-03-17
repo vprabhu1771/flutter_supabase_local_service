@@ -1,5 +1,8 @@
 import 'package:intl/intl.dart';
 
+import 'Freelancer.dart';
+import 'SubCategory.dart';
+
 class Booking {
   final int id;
   final String bookingDate;
@@ -68,28 +71,7 @@ class Customer {
   }
 }
 
-class Freelancer {
-  final int id;
-  final User user;
-  final String userId;
-  final int subCategoryId;
 
-  Freelancer({
-    required this.id,
-    required this.user,
-    required this.userId,
-    required this.subCategoryId,
-  });
-
-  factory Freelancer.fromJson(Map<String, dynamic> json) {
-    return Freelancer(
-      id: json['id'],
-      user: User.fromJson(json['users']),
-      userId: json['user_id'],
-      subCategoryId: json['sub_category_id'],
-    );
-  }
-}
 
 class User {
   final String id;
@@ -117,28 +99,3 @@ class User {
   }
 }
 
-class SubCategory {
-  final int id;
-  final String name;
-  final String createdAt;
-  final String imagePath;
-  final int categoryId;
-
-  SubCategory({
-    required this.id,
-    required this.name,
-    required this.createdAt,
-    required this.imagePath,
-    required this.categoryId,
-  });
-
-  factory SubCategory.fromJson(Map<String, dynamic> json) {
-    return SubCategory(
-      id: json['id'],
-      name: json['name'],
-      createdAt: json['created_at'],
-      imagePath: json['image_path'],
-      categoryId: json['category_id'],
-    );
-  }
-}

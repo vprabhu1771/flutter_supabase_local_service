@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_supabase_local_service/screens/HomePage.dart';
-import 'package:flutter_supabase_local_service/screens/auth/RegisterScreen.dart';
+import 'package:flutter_supabase_local_service/screens/common/auth/RegisterScreen.dart';
 import 'services/UiProvider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
