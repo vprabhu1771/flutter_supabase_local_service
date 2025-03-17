@@ -3,6 +3,7 @@ class User {
   final String name;
   final String email;
   final String phone;
+  final String image_path;
   final String createdAt;
 
   User({
@@ -10,6 +11,7 @@ class User {
     required this.name,
     required this.email,
     required this.phone,
+    required this.image_path,
     required this.createdAt,
   });
 
@@ -19,6 +21,7 @@ class User {
       name: json['name'],
       email: json['email'],
       phone: json['phone'],
+      image_path: json['image_path'],
       createdAt: json['created_at'],
     );
   }
