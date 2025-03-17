@@ -15,8 +15,11 @@ class FreelancerScreen extends StatefulWidget {
 
 class _FreelancerScreenState extends State<FreelancerScreen> {
   final supabase = Supabase.instance.client;
+
   List<Freelancer> users = [];
+
   bool isLoading = true;
+
   late String subCategoryName;
 
   @override
@@ -76,8 +79,7 @@ class _FreelancerScreenState extends State<FreelancerScreen> {
               contentPadding: EdgeInsets.all(12),
               leading: CircleAvatar(
                 radius: 35,
-                backgroundImage: NetworkImage(
-                  user?.image_path ?? 'https://gravatar.com/avatar/${user!.email}',
+                backgroundImage: NetworkImage(user?.image_path ?? 'https://gravatar.com/avatar/${user!.email}',
                 ),
               ),
               title: Text(
