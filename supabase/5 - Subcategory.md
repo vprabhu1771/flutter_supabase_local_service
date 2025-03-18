@@ -26,7 +26,7 @@ INSERT INTO "public"."sub_categories" ("id", "created_at", "name", "image_path",
 ```
 
 ```sql
-INSERT INTO subcategories (category_id, name) VALUES
+INSERT INTO sub_categories (category_id, name) VALUES
 -- Painter
 ((SELECT id FROM categories WHERE name = 'Painter'), 'Wall Painting'),
 ((SELECT id FROM categories WHERE name = 'Painter'), 'Furniture Painting'),
