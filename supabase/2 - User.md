@@ -37,6 +37,7 @@ FOR EACH ROW
 EXECUTE FUNCTION handle_new_user();
 ```
 
+```sql
 INSERT INTO users (id, name, email, phone, created_at, updated_at)
 VALUES
 (gen_random_uuid(), 'Arun Kumar', 'arunkumar.tn@example.com', '+91 9876543210', NOW(), NOW()),
@@ -49,3 +50,4 @@ VALUES
 (gen_random_uuid(), 'Meena V', 'meena.v@example.com', '+91 9923658741', NOW(), NOW()),
 (gen_random_uuid(), 'Rajeshwaran P', 'rajesh.p@example.com', '+91 9845632147', NOW(), NOW()),
 (gen_random_uuid(), 'Harini B', 'harini.b@example.com', '+91 9764123589', NOW(), NOW());
+```
