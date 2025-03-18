@@ -20,7 +20,7 @@ class _FreelancerDashboardState extends State<FreelancerDashboard> {
 
   late String userId;
   final int assignedDeliveries = 8;
-  final double earnings = 1250.50;
+  late double earnings = 0;
   late int pendingBookings = 0;
   late int confirmedBookings = 0;
   late int canceledBookings = 0;
@@ -34,7 +34,36 @@ class _FreelancerDashboardState extends State<FreelancerDashboard> {
       userId = supabase.auth.currentUser!.id; // Replace with actual logged-in user ID
     });
 
+    fetchEarnings();
+
     fetchServiceBooking();
+  }
+
+  fetchEarnings() async {
+    if (userId == null) return;
+
+    try {
+      final response = await supabase
+          .from('service_bookings')
+          .select('amount')
+          .eq('freelancer_user_id', userId)
+          .eq('status', 'confirmed');
+
+      if (response != null && response.isNotEmpty) {
+        double totalEarnings = response.fold(0.0, (sum, booking) => sum + (booking['amount'] ?? 0.0));
+
+        setState(() {
+          earnings = totalEarnings;
+        });
+      } else {
+        setState(() {
+          earnings = 0.0;
+        });
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+      print('Error: $e');
+    }
   }
 
   fetchServiceBooking() async {
