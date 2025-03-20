@@ -181,7 +181,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
               ListTile(
                 leading: Icon(Icons.location_on),
-                title: Text( _location ?? 'Unkown'), // Replace with dynamic address
+                title: Text( user?.userMetadata?['address'] ?? 'Unkown'), // Replace with dynamic address
                 onTap: () {
                   // Handle address action
                 },
