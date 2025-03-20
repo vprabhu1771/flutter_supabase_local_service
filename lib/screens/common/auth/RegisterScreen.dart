@@ -38,7 +38,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   String selectedRoleKey = 'Customer'; // Default role
 
-  @override
+
   Future<void> _signUp() async {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _isLoading = true);
