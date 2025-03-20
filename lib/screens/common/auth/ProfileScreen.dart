@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+
 import '../../customer/HomeScreen.dart';
-import 'EditProfileScreen.dart';
-
-import 'EditProfilePicScreen.dart';
-
 
 final supabase = Supabase.instance.client;
 
@@ -22,15 +22,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   final storage = FlutterSecureStorage(); // Secure storage instance
 
-  var user = supabase.auth.currentUser;
+  final user = supabase.auth.currentUser;
 
-  Future<void> refreshUserData() async {
-    await supabase.auth.refreshSession();
-    setState(() {
-      user = supabase.auth.currentUser; // Update user state
-    });
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentLocation();
   }
-
 
   Future<void> signOut() async {
     await supabase.auth.signOut();
@@ -46,61 +44,109 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  String _location = "Press the button to get location";
+  bool _isLoading = false;
+
+  Future<void> _getCurrentLocation() async {
+    setState(() {
+      _isLoading = true;
+      _location = "Fetching location...";
+    });
+
+    try {
+      // Check if location services are enabled
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        setState(() {
+          _location = "Location services are disabled.";
+          _isLoading = false;
+        });
+        return;
+      }
+
+      // Check and request location permissions
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          setState(() {
+            _location = "Location permissions are denied.";
+            _isLoading = false;
+          });
+          return;
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        setState(() {
+          _location =
+          "Location permissions are permanently denied. Please enable them in settings.";
+          _isLoading = false;
+        });
+        return;
+      }
+
+      // Get the current position
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      // Get address from coordinates
+      await _getAddressFromLatLng(position);
+    } catch (e) {
+      setState(() {
+        _location = "Error: $e";
+        _isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _getAddressFromLatLng(Position position) async {
+    try {
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+        position.latitude,
+        position.longitude,
+      );
+
+      if (placemarks.isNotEmpty) {
+        Placemark place = placemarks.first;
+        setState(() {
+          _location =
+          "${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}";
+        });
+      } else {
+        setState(() {
+          _location = "No address available for this location.";
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _location = "Failed to get address: $e";
+      });
+    } finally {
+      _isLoading = false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
+      // appBar: AppBar(
+      //   title: Text(widget.title),
+      // ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-
               // Profile Image View
               Center(
-                child: Stack(
-                  children: [
-                    CircleAvatar(
-                      radius: 50,
-                      backgroundImage: NetworkImage(
-                          user?.userMetadata?['image_path'] ?? 'https://gravatar.com/avatar/${user!.email}'),
-                      backgroundColor: Colors.grey[200],
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: GestureDetector(
-                        onTap: () async {
-
-                          print(user?.userMetadata?['image_path']);
-
-                          bool? result = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => EditProfilePicScreen(),
-                            ),
-                          );
-
-                          if (result == true) {
-                            // Refresh data after edit
-                            // Refresh UI
-                            await refreshUserData();
-                          }
-
-                        },
-                        child: CircleAvatar(
-                          radius: 18,
-                          backgroundColor: Colors.blue,
-                          child: Icon(Icons.edit, color: Colors.white, size: 18),
-                        ),
-                      ),
-                    ),
-                  ],
+                child: CircleAvatar(
+                  radius: 50,
+                  backgroundImage: NetworkImage('https://gravatar.com/avatar/${user!.email}'), // Replace with the user's image URL
+                  backgroundColor: Colors.grey[200],
                 ),
               ),
-
               const SizedBox(height: 16),
 
               // Profile Details List
@@ -108,19 +154,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 leading: Icon(Icons.person),
                 title: Text(user?.userMetadata?['name']), // Replace with dynamic user name
                 trailing: Icon(Icons.edit),
-                onTap: () async  {
+                onTap: () {
                   // Handle the edit profile action
-                  bool? result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => EditProfileScreen(),
-                    ),
-                  );
-
-                  if (result == true) {
-                    await refreshUserData(); // Refresh data after edit
-                  }
-
                 },
               ),
               const Divider(),
@@ -146,7 +181,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
               ListTile(
                 leading: Icon(Icons.location_on),
-                title: Text('New York, USA'), // Replace with dynamic address
+                title: Text( _location ?? 'Unkown'), // Replace with dynamic address
                 onTap: () {
                   // Handle address action
                 },
