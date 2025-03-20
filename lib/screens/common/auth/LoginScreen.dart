@@ -25,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final Map<String, String> _roleMap = {
     'Customer': 'customer',
-    'Freelancer': 'delivery',
+    'Freelancer': 'freelancer',
     'Admin': 'admin',
   };
 
@@ -38,8 +38,8 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    emailController.text = "admin@gmail.com";
-    passwordController.text = "admin@123";
+    // emailController.text = "admin@gmail.com";
+    // passwordController.text = "admin@123";
   }
 
   Future<void> fetchUserRole(String userId) async {
@@ -176,9 +176,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 // Set email & password based on role selection
                 if (_selectedRole == 'customer') {
-                  emailController.text = "mani_maran@gmail.com";
-                  passwordController.text = "admin@123";
-                } else if (_selectedRole == 'delivery') {
+                  // emailController.text = "mani_maran@gmail.com";
+                  // passwordController.text = "admin@123";
+                } else if (_selectedRole == 'freelancer') {
                   emailController.text = "prabhu@gmail.com";
                   passwordController.text = "admin@123";
                 } else if (_selectedRole == 'admin') {
