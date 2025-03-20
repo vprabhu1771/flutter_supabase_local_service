@@ -87,7 +87,7 @@ class CustomDrawer extends StatelessWidget {
                   },
                 ),
 
-              ] else if (role == 'delivery') ...[
+              ] else if (role == 'freelancer')...[
 
                 ListTile(
                   leading: Icon(Icons.calendar_month),
