@@ -121,6 +121,20 @@ class CustomDrawer extends StatelessWidget {
 
                 ListTile(
                   leading: Icon(Icons.calendar_month),
+                  title: Text('Home'),
+                  onTap: () {
+                    // Navigate to HomePage first and pass the selected index for MyBookings
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HomePage(initialTabIndex: 0), // Open "Bookings" tab
+                      ),
+                          (route) => false, // Removes all previous routes from the stack
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.calendar_month),
                   title: Text('Bookings'),
                   onTap: () {
                     // Navigate to HomePage first and pass the selected index for MyBookings
