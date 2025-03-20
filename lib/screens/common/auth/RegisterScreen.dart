@@ -154,7 +154,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     } else if (role == 'customer') {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (_) => HomePage()));
-    } else if (role == 'delivery') {
+    } else if (role == 'freelancer') {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
