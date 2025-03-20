@@ -5,8 +5,10 @@ import 'package:geolocator/geolocator.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../../admin/AdminDashboard.dart';
 import '../../customer/HomePage.dart';
 import '../../customer/HomeScreen.dart';
+import '../../freelancer/FreelancerDashboard.dart';
 import 'LoginScreen.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -45,6 +47,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   List<Map<String, dynamic>> subcategories = [];
   String? selectedCategory;
   String? selectedSubcategory;
+
+  String? userId;
 
   @override
   void initState() {
@@ -90,8 +94,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         data: {
           'name': nameController.text.trim(),
           'phone': phoneController.text.trim(),
-          'role': roleMap[selectedRoleKey],
-          if (selectedRoleKey == 'Freelancer') 'category_id': selectedCategory,
+          'address': addressController.text.trim(),
+          // 'role': roleMap[selectedRoleKey],
+          // if (selectedRoleKey == 'Freelancer') 'category_id': selectedCategory,
           // if (selectedRoleKey == 'Freelancer') 'subcategory_id': selectedSubcategory,
         },
       );
@@ -119,6 +124,44 @@ class _RegisterScreenState extends State<RegisterScreen> {
     setState(() => _isLoading = false);
   }
 
+  Future<void> fetchUserRole(String userId) async {
+    try {
+      final response = await Supabase.instance.client
+          .from('user_roles')
+          .select('roles(id, name)')
+          .eq('user_id', userId)
+          .maybeSingle(); // Avoids crash if no rows are found
+
+      print(response.toString());
+
+      if (response != null && response['roles'] != null) {
+        final role = response['roles']['name'];
+        navigateBasedOnRole(role);
+      } else {
+        print("No role found for user: $userId");
+      }
+    } catch (e) {
+      print("Error fetching role: $e");
+    }
+  }
+
+  void navigateBasedOnRole(String role) {
+    if (role == 'admin') {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (_) => AdminDashboard(title: "Admin Dashboard")));
+    } else if (role == 'customer') {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (_) => HomePage()));
+    } else if (role == 'delivery') {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (_) => FreelancerDashboard(title: "Freelancer Dashboard")));
+    }
+  }
+
   Future<void> signIn() async {
     try {
       final response = await supabase.auth.signInWithPassword(
@@ -127,20 +170,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
       );
 
       if (response.session != null) {
+        // Save session data securely
         await storage.write(key: 'session', value: response.session!.accessToken);
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Login successful!')),
         );
 
-        Navigator.pop(context);
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => HomeScreen(title: 'Home')),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Login failed. Please try again.')),
-        );
+        setState(() {
+          userId = supabase.auth.currentUser?.id;
+        });
+
+        if (userId != null) {
+          fetchUserRole(userId!);
+        }
       }
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
