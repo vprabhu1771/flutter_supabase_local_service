@@ -52,6 +52,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   String _location = "Press the button to get location";
   bool _isLoading = false;
 
+  // ✅ **Initialize with default values to avoid LateInitializationError**
+  double latitude = 0.0;
+  double longitude = 0.0;
+
   Future<void> _getCurrentLocation() async {
     setState(() {
       _isLoading = true;
@@ -63,6 +67,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       if (position != null) {
         String address = await _locationService.getAddressFromPosition(position);
         setState(() => _location = address);
+
+        setState(() {
+          latitude = position.latitude;
+          longitude = position.longitude;
+        });
       }
     } catch (e) {
       setState(() => _location = "Error: ${e.toString()}");
@@ -75,7 +84,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: CustomDrawer(parentContext: context,),
-      appBar: CustomLocationAppBar(address: _location),
+      appBar: CustomLocationAppBar(address: _location, latitude: latitude, longitude: longitude,),
       body: _tabs[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,

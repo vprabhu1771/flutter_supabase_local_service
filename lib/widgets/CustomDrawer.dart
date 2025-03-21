@@ -87,7 +87,7 @@ class CustomDrawer extends StatelessWidget {
                   },
                 ),
 
-              ] else if (role == 'delivery') ...[
+              ] else if (role == 'freelancer')...[
 
                 ListTile(
                   leading: Icon(Icons.calendar_month),
@@ -119,6 +119,20 @@ class CustomDrawer extends StatelessWidget {
 
               ] else if (role == 'customer') ...[
 
+                ListTile(
+                  leading: Icon(Icons.calendar_month),
+                  title: Text('Home'),
+                  onTap: () {
+                    // Navigate to HomePage first and pass the selected index for MyBookings
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HomePage(initialTabIndex: 0), // Open "Bookings" tab
+                      ),
+                          (route) => false, // Removes all previous routes from the stack
+                    );
+                  },
+                ),
                 ListTile(
                   leading: Icon(Icons.calendar_month),
                   title: Text('Bookings'),
