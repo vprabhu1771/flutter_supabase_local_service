@@ -3,7 +3,7 @@ class Customer {
   final String name;
   final String email;
   final String phone;
-  final String image_path;
+  final String? image_path;
   final String createdAt;
 
   Customer({
