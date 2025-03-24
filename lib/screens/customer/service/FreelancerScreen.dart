@@ -32,8 +32,10 @@ class _FreelancerScreenState extends State<FreelancerScreen> {
     try {
       final response = await supabase
           .from('freelancer')
-          .select('user_id, users(*), sub_category:sub_categories(*)')
+          .select('*, users(*), sub_category:sub_categories(*)')
           .eq('sub_category_id', widget.subCategory.id);
+
+      print(response.toString());
 
       if (response.isNotEmpty) {
         final subCategory = response[0]['sub_category'];
