@@ -5,17 +5,17 @@ import '../../models/Booking.dart';
 import '../../widgets/CustomDrawer.dart';
 
 
-class YourBookingScreen extends StatefulWidget {
+class FreelancerYourBookingScreen extends StatefulWidget {
   final String title;
   final String filter;
 
-  const YourBookingScreen({super.key, required this.title, required this.filter});
+  const FreelancerYourBookingScreen({super.key, required this.title, required this.filter});
 
   @override
-  State<YourBookingScreen> createState() => _YourBookingScreenState();
+  State<FreelancerYourBookingScreen> createState() => _FreelancerYourBookingScreenState();
 }
 
-class _YourBookingScreenState extends State<YourBookingScreen> {
+class _FreelancerYourBookingScreenState extends State<FreelancerYourBookingScreen> {
   final SupabaseClient supabase = Supabase.instance.client;
   String? userId;
   late String selectedFilter;
@@ -24,8 +24,13 @@ class _YourBookingScreenState extends State<YourBookingScreen> {
   @override
   void initState() {
     super.initState();
+
+    print(widget.filter);
+
     userId = supabase.auth.currentUser?.id;
+
     selectedFilter = widget.filter;
+
     _fetchBookings();
   }
 
@@ -114,6 +119,7 @@ class _YourBookingScreenState extends State<YourBookingScreen> {
                 DropdownMenuItem(value: 'confirmed', child: Text('Confirmed')),
                 DropdownMenuItem(value: 'pending', child: Text('Pending')),
                 DropdownMenuItem(value: 'canceled', child: Text('Canceled')),
+                DropdownMenuItem(value: 'completed', child: Text('Completed')),
               ],
               onChanged: (value) {
                 setState(() {
