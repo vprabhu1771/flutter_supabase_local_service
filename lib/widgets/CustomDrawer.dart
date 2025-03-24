@@ -111,7 +111,7 @@ class CustomDrawer extends StatelessWidget {
                     Navigator.push(
                       parentContext,
                       MaterialPageRoute(
-                        builder: (context) => YourBookingScreen(title: 'Your Bookings', filter: 'all',),
+                        builder: (context) => FreelancerYourBookingScreen(title: 'Your Bookings', filter: 'all',),
                       ),
                     );
                   },
