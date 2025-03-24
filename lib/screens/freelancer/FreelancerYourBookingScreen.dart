@@ -40,6 +40,8 @@ class _FreelancerYourBookingScreenState extends State<FreelancerYourBookingScree
           ? _fetchAllBookings()
           : _fetchBookingsByStatus(status: selectedFilter);
     });
+
+    print(bookingsFuture.toString());
   }
 
   Future<List<Booking>> _fetchAllBookings() async {
@@ -54,6 +56,8 @@ class _FreelancerYourBookingScreenState extends State<FreelancerYourBookingScree
         sub_category:sub_categories(*)
       ''')
         .order('booking_date', ascending: false);
+
+    print("All Bookings Response: $response");
 
     if (response is List) {
       return response.map((data) => Booking.fromJson(data)).toList();
@@ -75,6 +79,8 @@ class _FreelancerYourBookingScreenState extends State<FreelancerYourBookingScree
         .eq('status', status)
         .order('booking_date', ascending: false);
 
+    print("Bookings by Status ($status) Response: $response");
+
     if (response is List) {
       return response.map((data) => Booking.fromJson(data)).toList();
     }
@@ -82,8 +88,20 @@ class _FreelancerYourBookingScreenState extends State<FreelancerYourBookingScree
   }
 
   Future<void> _updateBookingStatus(int bookingId, String newStatus) async {
-    await supabase.from('service_bookings').update({'status': newStatus}).eq('id', bookingId);
-    _fetchBookings();
+    try {
+      print("Updating booking ID: $bookingId to status: $newStatus");
+
+      final response = await supabase
+          .from('service_bookings')
+          .update({'status': newStatus})
+          .eq('id', bookingId);
+
+      print("Update Response: $response");
+
+      _fetchBookings();
+    } catch (e) {
+      print("Error updating booking status: $e");
+    }
   }
 
   Color _getStatusColor(String status) {
@@ -144,12 +162,16 @@ class _FreelancerYourBookingScreenState extends State<FreelancerYourBookingScree
           future: bookingsFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
+              print("Loading bookings...");
               return Center(child: CircularProgressIndicator());
             }
-            if (snapshot.hasError || snapshot.data == null || snapshot.data!.isEmpty) {
-              return Center(
-                  child: Text('No bookings found.',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)));
+            if (snapshot.hasError) {
+              print("Error fetching bookings: ${snapshot.error}");
+              return Center(child: Text('Error loading bookings.'));
+            }
+            if (snapshot.data == null || snapshot.data!.isEmpty) {
+              print("No bookings found.");
+              return Center(child: Text('No bookings found.'));
             }
 
             final bookings = snapshot.data!;
@@ -160,6 +182,7 @@ class _FreelancerYourBookingScreenState extends State<FreelancerYourBookingScree
               itemBuilder: (context, index) {
                 final booking = bookings[index];
                 final providerName = booking.freelancer.user.name;
+                final subCategoryName = booking.subCategory.name;
                 final providerEmail = booking.freelancer.user.email;
                 final bookingDate = booking.bookingDate;
                 final status = booking.status;
@@ -175,7 +198,7 @@ class _FreelancerYourBookingScreenState extends State<FreelancerYourBookingScree
                       backgroundImage: NetworkImage('https://gravatar.com/avatar/$providerEmail'),
                       radius: 30,
                     ),
-                    title: Text(providerName,
+                    title: Text("${providerName} - ${subCategoryName}",
                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
