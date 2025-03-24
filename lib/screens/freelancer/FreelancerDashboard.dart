@@ -179,7 +179,7 @@ class _FreelancerDashboardState extends State<FreelancerDashboard> {
                   onTap: (){
                     Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => YourBookingScreen(title: 'Your Bookings', filter: 'pending'))
+                        MaterialPageRoute(builder: (context) => FreelancerYourBookingScreen(title: 'Your Bookings', filter: 'pending'))
                     );
                   },
                   child: _buildOrderStatus(
@@ -193,7 +193,7 @@ class _FreelancerDashboardState extends State<FreelancerDashboard> {
                   onTap: (){
                     Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => YourBookingScreen(title: 'Your Bookings', filter: 'completed'))
+                        MaterialPageRoute(builder: (context) => FreelancerYourBookingScreen(title: 'Your Bookings', filter: 'completed'))
                     );
                   },
                   child: _buildOrderStatus(
@@ -207,7 +207,7 @@ class _FreelancerDashboardState extends State<FreelancerDashboard> {
                   onTap: (){
                     Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => YourBookingScreen(title: 'Your Bookings', filter: 'canceled'))
+                        MaterialPageRoute(builder: (context) => FreelancerYourBookingScreen(title: 'Your Bookings', filter: 'canceled'))
                     );
                   },
                   child:_buildOrderStatus(
